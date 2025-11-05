@@ -25,6 +25,8 @@ func (cfg Config) ConnectionPostgres() (*Postgres, error) {
 		cfg.PsqlDB.DBName,
 	)
 
+	log.Info().Str("host", cfg.PsqlDB.Host).Int("port", cfg.PsqlDB.Port).Msg("Connecting to database")
+
 	// Membuat koneksi ke database PostgreSQL
 	db, err := gorm.Open(postgres.Open(dbConnString), &gorm.Config{})
 
@@ -44,6 +46,8 @@ func (cfg Config) ConnectionPostgres() (*Postgres, error) {
 	// Mengatur jumlah maksimal koneksi terbuka dan idle
 	sqlDB.SetMaxOpenConns(cfg.PsqlDB.DBMaxOpen)
 	sqlDB.SetMaxIdleConns(cfg.PsqlDB.DBMaxIdle)
+
+	log.Info().Msg("Successfully connected to database")
 
 	// Mengembalikan koneksi ke database PostgreSQL
 	return &Postgres{DB: db}, nil
